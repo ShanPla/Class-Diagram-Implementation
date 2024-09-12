@@ -3,6 +3,7 @@
 #include <algorithm>
 using namespace std;
 
+	int counter;
 	string accName, accPass, ans;
 	bool isLoggedIn = false;
 	const char separator    = ' ';
@@ -68,8 +69,8 @@ class shoppingCart{
 	
 	private:
 		
-		int total, i, itemQuantity;
-		string cartID;
+		int total, i, itemQuantity, itemPrice;
+		string cartID, itemName;
 		
 	
 	public:
@@ -85,17 +86,34 @@ class shoppingCart{
 			
 		}
 	
+		void setPrice(int c){
+			itemPrice = c;
+		}
+		
 		void setID(string a){
 			
 			cartID = a;
 			
 		}
+		
+		void setName(string b){
+			itemName = b;
+		}
 
 		int getQuantity(){
 			return itemQuantity;
 		}
+		
+		int getPrice(){
+			return itemPrice;
+		}
+		
 		string getID(){
 			return cartID;
+		}
+		
+		string getName(){
+			return itemName;
 		}
 };
 
@@ -124,11 +142,12 @@ void Menu(){
 
 void viewProduct(cartHolder& cart){
 	
-	int quantity, counter;
+	int quantity, Price;
+	string Name;
 	
 	for(int i = 0; i<3; i++){
 	
-	cout<<"\n";
+	cout<<"\n====================================================="<<endl;
 	cout << left << setw(nameWidth) << setfill(separator) << "Order ID";
 	cout << left << setw(nameWidth) << setfill(separator) << "Name";
 	cout << left << setw(nameWidth) << setfill(separator) << "Price";
@@ -144,65 +163,77 @@ void viewProduct(cartHolder& cart){
 	cout << left << setw(nameWidth) << setfill(separator) << "GHI";
 	cout << left << setw(nameWidth) << setfill(separator) << "Alcohol";
 	cout << left << setw(nameWidth) << setfill(separator) << "350php";
-	cout<<"\n";
+	cout<<"\n====================================================="<<endl;
 	
-	cout<<"Enter the ID of the product you want to add in the shopping cart: ";
+	cout<<"\nEnter the ID of the product you want to add in the shopping cart: ";
 	cin>>ans;
 	transform(ans.begin(), ans.end(), ans.begin(), ::toupper);
 	
 	cart.Items[i].setID(ans);
 	
+	cout<<"\nEnter Quantity: ";
+	cin>>quantity;
+	cart.Items[i].setQuantity(quantity);
+	
 	if(ans == "ABC"){
 		
-		cout<<"\nEnter Quantity: ";
-		cin>>quantity;
-		cart.Items[i].setQuantity(quantity);
-		
+		Name = "Rope";
+		cart.Items[i].setName(Name);
 		quantity*150;
-		cart.Items[i].setTotal(quantity);
-		
-		cout<<"\nItem Added to Cart Successfully!";	
-		
+		Price = 150;
+	
 	}
 	
 	else if(ans == "DEF"){
 		
-		cout<<"\nEnter Quantity: ";
-		cin>>quantity;
-		cart.Items[i].setQuantity(quantity);
-		
+		Name = "Toaster";
+		cart.Items[i].setName(Name);
 		quantity*500;
-		cart.Items[i].setTotal(quantity);
+		Price = 500;
 		
-		cout<<"\nItem Added to Cart Successfully!";	
 	}
 	
 	else if(ans == "GHI"){
 		
-		cout<<"\nEnter Quantity: ";
-		cin>>quantity;
-		cart.Items[i].setQuantity(quantity);
-		
+		Name = "Alcohol";
+		cart.Items[i].setName(Name);
 		quantity*350;
-		cart.Items[i].setTotal(quantity);
+		Price = 350;
 		
-		cout<<"\nItem Added to Cart Successfully!";	
 	}
 	
 	else{
 		cout<<"\nInvalid Input.";
 		i--;
 	}
+	
+	cart.Items[i].setPrice(Price);
+	cart.Items[i].setTotal(quantity);
 	cin.ignore();
+	
+	cout<<"\nItem Added to Cart Successfully!"<<endl;	
 	
 counter++;
 }
 }
 
 void viewCart(cartHolder& cart){
+	
+	cout<<"\n====================================================="<<endl;
+	cout << left << setw(nameWidth) << setfill(separator) << "Order ID";
+	cout << left << setw(nameWidth) << setfill(separator) << "Name";
+	cout << left << setw(nameWidth) << setfill(separator) << "Price";
+	cout << left << setw(nameWidth) << setfill(separator) << "Quantity";	
 		
-for(int i = 0; i<3; i++){
-cout<<"\n\n\n"<<cart.Items[i].getID();
+	for(int i = 0; i<counter; i++){
+		
+	cout<<"\n";
+	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getID();
+	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getName();
+	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getPrice();
+	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getQuantity();
+	cout<<"\n====================================================="<<endl;
+		
 }
 
 }
