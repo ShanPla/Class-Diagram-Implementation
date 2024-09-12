@@ -124,33 +124,31 @@ class shoppingCart{
 		}
 };
 
-class Order{
-	
-	private:
-		int orderPrice, orderQuantity;
-		string orderName, orderID;
-	
-	public:
-		
-		void setOrderQuantity(int a){
-			orderQuantity = a;
-		}
-		void setOrderPrice(int b){
-			orderPrice = b;
-		}
-		void setOrderName(string a){
-			orderName = a;
-		}
-		void setOrderID(string b){
-			orderID = b;
-		}
-		
+class Order {
+public:
+    shoppingCart Items[20];
+    int itemCount = 0;
+    int totalAmount = 0;
+
+    void setTotalAmount(int amount) {
+        totalAmount = amount;
+    }
+
+    int getTotalAmount() {
+        return totalAmount;
+    }
+
+    int getItemCount() {
+        return itemCount;
+    }
 };
 
 
 class cartHolder{
 	
 	public:
+		Order orders[20];  // Array to store multiple orders
+  	  int orderCount = 0;
 		shoppingCart Items[20];
 	
 	friend void viewProduct(cartHolder& cart);
@@ -258,6 +256,11 @@ void viewCart(cartHolder& cart){
 		cout<<"going back to menu...";
 	}
 	else{
+		
+		Order newOrder;
+		
+		newOrder.itemCount = counter;
+   		int totalAmount = 0;
 	
 	cout<<"\n====================================================="<<endl;
 	cout<<"Total Amount: "<<total<<endl;
@@ -275,39 +278,48 @@ void viewCart(cartHolder& cart){
 	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getPrice();
 	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getQuantity();
 		
+		newOrder.Items[i] = cart.Items[i];
+        totalAmount += cart.Items[i].getPrice();
 }
-	
+
+	newOrder.setTotalAmount(totalAmount);
+	cart.orders[cart.orderCount] = newOrder;
+	cart.orderCount++;
 	
 	cout<<"\n====================================================="<<endl;
 	
 	cout<<"\nYou have successfully checked out the products!"<<endl;
 	
+	counter = 0;
+    total = 0;
+	
 	system("PAUSE");
 }
 }
 
-//void viewOrder(cartHolder& cart){
+void viewOrder(cartHolder& cart) {
 	
-//	for(int i = 0; i<counter; i++){
-//	
-//	cout<<"\n====================================================="<<endl;
-//	cout<<"Order no."<<i+1;
-//	cout<<"Total Amount: "<<total<<endl;
-//	cout<<"Order Details: "<<endl;
-//	cout << left << setw(nameWidth) << setfill(separator) << "Product ID";
-//	cout << left << setw(nameWidth) << setfill(separator) << "Name";
-//	cout << left << setw(nameWidth) << setfill(separator) << "Price";
-//	cout << left << setw(nameWidth) << setfill(separator) << "Quantity";	
-//		
-//	cout<<"\n";
-//	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getID();
-//	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getName();
-//	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getPrice();
-//	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getQuantity();
-//		
-//	cout<<"\n====================================================="<<endl;
-//}
-//}
+	system("CLS");
+	
+    for (int i = 0; i < cart.orderCount; i++) {
+        cout << "\nOrder ID: " << i + 1 << endl;
+        cout << "Total Amount: " << cart.orders[i].getTotalAmount() << endl;
+        cout << "Order Details: " << endl;
+        cout << left << setw(nameWidth) << setfill(separator) << "Product ID";
+        cout << left << setw(nameWidth) << setfill(separator) << "Name";
+        cout << left << setw(nameWidth) << setfill(separator) << "Price";
+        cout << left << setw(nameWidth) << setfill(separator) << "Quantity" << endl;
+
+        for (int j = 0; j < cart.orders[i].getItemCount(); j++) {
+            cout << left << setw(nameWidth) << setfill(separator) << cart.orders[i].Items[j].getID();
+            cout << left << setw(nameWidth) << setfill(separator) << cart.orders[i].Items[j].getName();
+            cout << left << setw(nameWidth) << setfill(separator) << cart.orders[i].Items[j].getPrice();
+            cout << left << setw(nameWidth) << setfill(separator) << cart.orders[i].Items[j].getQuantity() << endl;
+        }
+
+        cout << "\n=====================================================" << endl;
+    }
+}
 
 
 void Account(){
@@ -325,9 +337,11 @@ void Account(){
 	 	
 	 	cout<<"\nUsername: ";
 		cin>>accName;
+		transform(accName.begin(), accName.end(), accName.begin(), ::toupper);
 	
 		cout<<"Password: ";
 		cin>>accPass;
+		transform(accPass.begin(), accPass.end(), accPass.begin(), ::toupper);
 	
 		if (accName.compare(Account.getName()) == 0 && accPass.compare(Account.getPass()) == 0){
 		
@@ -335,7 +349,7 @@ void Account(){
 		isLoggedIn = true;
 		}
 		
-		else if (accPass.compare(Account.getPass()) == 1){
+		else{
 		
 			cout<<"\nWrong Username or Password.\n"<<endl;	
 	}
@@ -346,10 +360,12 @@ void Account(){
 	 	
 	 	cout<<"\nEnter Username: ";
 		cin>>accName;
+		transform(accName.begin(), accName.end(), accName.begin(), ::toupper);
 		Account.setName(accName);
 	
 		cout<<"Enter Password: ";
 		cin>>accPass;
+		transform(accPass.begin(), accPass.end(), accPass.begin(), ::toupper);
 		Account.setPass(accPass);
 
 		cout<<"\nRegistration Successful!\n"<<endl;
@@ -375,7 +391,7 @@ int main(){
 		viewCart(cart);
 	}
 	if (Ans == 3){
-//		viewOrder(cart);
+		viewOrder(cart);
 	}
 	if(Ans == 4){
 		cout<<"\nTerminating program...";
