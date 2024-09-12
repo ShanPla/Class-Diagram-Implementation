@@ -3,7 +3,7 @@
 #include <algorithm>
 using namespace std;
 
-	int counter;
+	int counter = 0, total, Ans;
 	string accName, accPass, ans;
 	bool isLoggedIn = false;
 	const char separator    = ' ';
@@ -69,17 +69,12 @@ class shoppingCart{
 	
 	private:
 		
-		int total, i, itemQuantity, itemPrice;
+		int itemQuantity, itemPrice;
 		string cartID, itemName;
 		
 	
 	public:
 		
-		void setTotal(int a){
-			
-			total += a;
-	}
-	
 		void setQuantity(int b){
 			
 			itemQuantity = b;
@@ -120,7 +115,7 @@ class shoppingCart{
 class cartHolder{
 	
 	public:
-		shoppingCart Items[33];
+		shoppingCart Items[10];
 	
 	friend void viewProduct(cartHolder& cart);
 	friend void viewCart(cartHolder& cart);	
@@ -136,7 +131,7 @@ void Menu(){
 	cout<<"\n3. View Orders";
 	cout<<"\n4. Exit";
 	cout<<"\nEnter choice: ";
-	cin>>ans;
+	cin>>Ans;
 		
 }
 
@@ -144,11 +139,12 @@ void viewProduct(cartHolder& cart){
 	
 	int quantity, Price;
 	string Name;
+	char choice;
 	
-	for(int i = 0; i<3; i++){
+	for(int i = 0; i<10; i++){
 	
 	cout<<"\n====================================================="<<endl;
-	cout << left << setw(nameWidth) << setfill(separator) << "Order ID";
+	cout << left << setw(nameWidth) << setfill(separator) << "Product ID";
 	cout << left << setw(nameWidth) << setfill(separator) << "Name";
 	cout << left << setw(nameWidth) << setfill(separator) << "Price";
 	cout<<"\n";
@@ -173,13 +169,13 @@ void viewProduct(cartHolder& cart){
 	
 	cout<<"\nEnter Quantity: ";
 	cin>>quantity;
+	cin.ignore();
 	cart.Items[i].setQuantity(quantity);
 	
 	if(ans == "ABC"){
 		
 		Name = "Rope";
-		cart.Items[i].setName(Name);
-		quantity*150;
+		total += quantity*150;
 		Price = 150;
 	
 	}
@@ -187,8 +183,7 @@ void viewProduct(cartHolder& cart){
 	else if(ans == "DEF"){
 		
 		Name = "Toaster";
-		cart.Items[i].setName(Name);
-		quantity*500;
+		total += quantity*500;
 		Price = 500;
 		
 	}
@@ -196,31 +191,46 @@ void viewProduct(cartHolder& cart){
 	else if(ans == "GHI"){
 		
 		Name = "Alcohol";
-		cart.Items[i].setName(Name);
-		quantity*350;
+		total += quantity*350;
 		Price = 350;
 		
 	}
 	
-	else{
-		cout<<"\nInvalid Input.";
+	cart.Items[i].setName(Name);
+	cart.Items[i].setPrice(Price*quantity);
+	
+	if(ans != "ABC" && ans != "DEF" && ans != "GHI"){
+		
+		cout<<"\nInvalid Input."<<endl;
 		i--;
+		counter--;
+	}
+	else{
+		cout<<"\nItem Added to Cart Successfully!"<<endl;
 	}
 	
-	cart.Items[i].setPrice(Price);
-	cart.Items[i].setTotal(quantity);
-	cin.ignore();
+	counter++;	
 	
-	cout<<"\nItem Added to Cart Successfully!"<<endl;	
+	cout<<"Do you want to add another product? (Y/N): ";
+	cin>>choice;
+	cout<<"\n";
 	
-counter++;
+	if(choice == 'n' || choice == 'N'){
+		break;
+	}
+	
 }
+	Menu();
 }
 
 void viewCart(cartHolder& cart){
 	
+//	for(int j = 0; j<counter; j++){
 	cout<<"\n====================================================="<<endl;
-	cout << left << setw(nameWidth) << setfill(separator) << "Order ID";
+//	cout<<"Order No."<<j<<":"<<endl;
+	cout<<"Total Amount: "<<total<<endl;
+	cout<<"Order Details: "<<endl;
+	cout << left << setw(nameWidth) << setfill(separator) << "Product ID";
 	cout << left << setw(nameWidth) << setfill(separator) << "Name";
 	cout << left << setw(nameWidth) << setfill(separator) << "Price";
 	cout << left << setw(nameWidth) << setfill(separator) << "Quantity";	
@@ -232,10 +242,10 @@ void viewCart(cartHolder& cart){
 	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getName();
 	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getPrice();
 	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getQuantity();
-	cout<<"\n====================================================="<<endl;
 		
 }
-
+	cout<<"\n====================================================="<<endl;
+//}
 }
 
 
@@ -258,15 +268,15 @@ void Account(){
 		cout<<"Password: ";
 		cin>>accPass;
 	
-		if (accName.compare(Account.getName()) == 0){
+		if (accName.compare(Account.getName()) == 0 && accPass.compare(Account.getPass()) == 0){
 		
-		cout<<"Login Successful!"<<endl;
+		cout<<"\nLogin Successful!\n"<<endl;
 		isLoggedIn = true;
 		}
-		else if (accName.compare(Account.getName()) == 1){
 		
-		cout<<"\nWrong Username or Password."<<endl;
+		else if (accPass.compare(Account.getPass()) == 1){
 		
+			cout<<"\nWrong Username or Password.\n"<<endl;	
 	}
 	 	
 	}
@@ -281,7 +291,7 @@ void Account(){
 		cin>>accPass;
 		Account.setPass(accPass);
 
-		cout<<"\nRegistration Successful!"<<endl;
+		cout<<"\nRegistration Successful!\n"<<endl;
 	 	
 	 }
 
@@ -292,20 +302,27 @@ void Account(){
 
 
 int main(){
+	
 	cartHolder cart;
 	Account();
 	Menu();
 	
-	if (ans == "1"){
+//	while(true){
+	
+	if (Ans == 1){
 		viewProduct(cart);
 	}
-	if (ans == "2"){
-			viewCart(cart);
-		
+ 	if (Ans == 2){
+		viewCart(cart);
 	}
 //	if (ans == '3'){
 //		viewOrder();
 //	}
-viewCart(cart);
+	if(Ans == 4){
+		cout<<"\nTerminating program...";
+//		break;
+	}
+//};
+
 return 0;	
 }
