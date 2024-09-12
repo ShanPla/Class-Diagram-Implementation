@@ -38,6 +38,7 @@ class Product{
 		int ropeQuantity, toasterQuantity, alcoholQuantity;
 	
 	public:
+		
 		void setRope(int a){
 			ropeQuantity = a;
 		}
@@ -63,14 +64,50 @@ class Product{
 		}
 };
 
-//class Order{
-//	
-//	private:
-//		int 
-//	
-//	
-//	
-//};
+class shoppingCart{
+	
+	private:
+		
+		int total, i, itemQuantity;
+		string cartID;
+		
+	
+	public:
+		
+		void setTotal(int a){
+			
+			total += a;
+	}
+	
+		void setQuantity(int b){
+			
+			itemQuantity = b;
+			
+		}
+	
+		void setID(string a){
+			
+			cartID = a;
+			
+		}
+
+		int getQuantity(){
+			return itemQuantity;
+		}
+		string getID(){
+			return cartID;
+		}
+};
+
+class cartHolder{
+	
+	public:
+		shoppingCart Items[33];
+	
+	friend void viewProduct(shoppingCart& cart);	
+		
+};
+	
 
 
 void Menu(){
@@ -85,16 +122,16 @@ void Menu(){
 		
 }
 
-void viewProduct(){
+void viewProduct(shoppingCart Items[]){
 	
 	Product Quantity;
-//	Order Quantity;
 	
-	int quantity, rope = 15, toaster = 8, alcohol = 10;
+	int quantity, counter, rope = 15, toaster = 8, alcohol = 10;
 	Quantity.setRope(rope);
 	Quantity.setToaster(toaster);
 	Quantity.setAlcohol(alcohol);
 	
+	for(int i = 0; i<3; i++){
 	
 	cout<<"\n";
 	cout << left << setw(nameWidth) << setfill(separator) << "Order ID";
@@ -120,18 +157,61 @@ void viewProduct(){
 	
 	cout<<"Enter the ID of the product you want to add in the shopping cart: ";
 	cin>>ans;
-	transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
-
-	if(ans == "abc"){
+	transform(ans.begin(), ans.end(), ans.begin(), ::toupper);
+	
+	Items[i].setID(ans);
+	
+	if(ans == "ABC"){
+		
 		cout<<"\nEnter Quantity: ";
 		cin>>quantity;
+		Items[i].setQuantity(quantity);
 		
-		cout<<"\nItem Added to Cart Successfully!";
+		quantity*150;
+		Items[i].setTotal(quantity);
+		
+		cout<<"\nItem Added to Cart Successfully!";	
 		
 	}
 	
-
+	else if(ans == "DEF"){
+		
+		cout<<"\nEnter Quantity: ";
+		cin>>quantity;
+		Items[i].setQuantity(quantity);
+		
+		quantity*500;
+		Items[i].setTotal(quantity);
+		
+		cout<<"\nItem Added to Cart Successfully!";	
+	}
 	
+	else if(ans == "GHI"){
+		
+		cout<<"\nEnter Quantity: ";
+		cin>>quantity;
+		Items[i].setQuantity(quantity);
+		
+		quantity*350;
+		Items[i].setTotal(quantity);
+		
+		cout<<"\nItem Added to Cart Successfully!";	
+	}
+	
+	else{
+		cout<<"\nInvalid Input.";
+		i--;
+	}
+	
+counter++;
+}
+}
+
+void viewCart(shoppingCart& Items){
+		
+for(int i = 0; i<3; i++){
+cout<<"\n\n\n"<<Items[i].getID();
+}
 }
 
 
@@ -188,20 +268,21 @@ void Account(){
 
 
 int main(){
-	
+	shoppingCart Cart[10];
 	Account();
 	Menu();
 	
 	if (ans == "1"){
-		viewProduct();
+		viewProduct(Cart);
 	}
-//	if (ans == '2'){
-//		viewCart();
-//	}
+	if (ans == "2"){
+		for (int i = 0; i < 5; i++){
+			viewCart(Cart[i]);
+		}
+	}
 //	if (ans == '3'){
 //		viewOrder();
 //	}
 
-		
 return 0;	
 }
