@@ -3,12 +3,12 @@
 #include <algorithm>
 using namespace std;
 
+	char choice;
 	int counter = 0, total, Ans;
 	string accName, accPass, ans;
 	bool isLoggedIn = false;
 	const char separator    = ' ';
     const int nameWidth     = 15;
-
 
 class Customer{
 	
@@ -31,6 +31,18 @@ class Customer{
 			return password;
 		}
 };
+
+void Menu(){
+	
+	cout<<"Options";
+	cout<<"\n1. View Products";
+	cout<<"\n2. View Shopping Cart";
+	cout<<"\n3. View Orders";
+	cout<<"\n4. Exit";
+	cout<<"\nEnter choice: ";
+	cin>>Ans;
+		
+}
 
 class Product{
 	
@@ -112,34 +124,45 @@ class shoppingCart{
 		}
 };
 
+class Order{
+	
+	private:
+		int orderPrice, orderQuantity;
+		string orderName, orderID;
+	
+	public:
+		
+		void setOrderQuantity(int a){
+			orderQuantity = a;
+		}
+		void setOrderPrice(int b){
+			orderPrice = b;
+		}
+		void setOrderName(string a){
+			orderName = a;
+		}
+		void setOrderID(string b){
+			orderID = b;
+		}
+		
+};
+
+
 class cartHolder{
 	
 	public:
-		shoppingCart Items[10];
+		shoppingCart Items[20];
 	
 	friend void viewProduct(cartHolder& cart);
 	friend void viewCart(cartHolder& cart);	
+	friend void viewOrder(cartHolder& cart);
 };
 	
-
-
-void Menu(){
-	
-	cout<<"Options";
-	cout<<"\n1. View Products";
-	cout<<"\n2. View Shopping Cart";
-	cout<<"\n3. View Orders";
-	cout<<"\n4. Exit";
-	cout<<"\nEnter choice: ";
-	cin>>Ans;
-		
-}
 
 void viewProduct(cartHolder& cart){
 	
 	int quantity, Price;
 	string Name;
-	char choice;
 	
 	for(int i = 0; i<10; i++){
 	
@@ -214,20 +237,29 @@ void viewProduct(cartHolder& cart){
 	cout<<"Do you want to add another product? (Y/N): ";
 	cin>>choice;
 	cout<<"\n";
+	cin.ignore();
 	
 	if(choice == 'n' || choice == 'N'){
 		break;
 	}
 	
+
 }
-	Menu();
 }
 
 void viewCart(cartHolder& cart){
 	
-//	for(int j = 0; j<counter; j++){
+	cout<<"Do you want to check out all the products? (Y/N): ";
+	cin>>choice;
+	cout<<"\n";
+	cin.ignore();
+	
+	if(choice == 'n' || choice == 'N'){
+		cout<<"going back to menu...";
+	}
+	else{
+	
 	cout<<"\n====================================================="<<endl;
-//	cout<<"Order No."<<j<<":"<<endl;
 	cout<<"Total Amount: "<<total<<endl;
 	cout<<"Order Details: "<<endl;
 	cout << left << setw(nameWidth) << setfill(separator) << "Product ID";
@@ -244,9 +276,38 @@ void viewCart(cartHolder& cart){
 	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getQuantity();
 		
 }
+	
+	
 	cout<<"\n====================================================="<<endl;
-//}
+	
+	cout<<"\nYou have successfully checked out the products!"<<endl;
+	
+	system("PAUSE");
 }
+}
+
+//void viewOrder(cartHolder& cart){
+	
+//	for(int i = 0; i<counter; i++){
+//	
+//	cout<<"\n====================================================="<<endl;
+//	cout<<"Order no."<<i+1;
+//	cout<<"Total Amount: "<<total<<endl;
+//	cout<<"Order Details: "<<endl;
+//	cout << left << setw(nameWidth) << setfill(separator) << "Product ID";
+//	cout << left << setw(nameWidth) << setfill(separator) << "Name";
+//	cout << left << setw(nameWidth) << setfill(separator) << "Price";
+//	cout << left << setw(nameWidth) << setfill(separator) << "Quantity";	
+//		
+//	cout<<"\n";
+//	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getID();
+//	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getName();
+//	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getPrice();
+//	cout << left << setw(nameWidth) << setfill(separator) << cart.Items[i].getQuantity();
+//		
+//	cout<<"\n====================================================="<<endl;
+//}
+//}
 
 
 void Account(){
@@ -298,16 +359,14 @@ void Account(){
 }while(isLoggedIn != true);
 }
 
-
-
-
 int main(){
 	
 	cartHolder cart;
 	Account();
-	Menu();
+
+	while(true){
 	
-//	while(true){
+	Menu();
 	
 	if (Ans == 1){
 		viewProduct(cart);
@@ -315,14 +374,14 @@ int main(){
  	if (Ans == 2){
 		viewCart(cart);
 	}
-//	if (ans == '3'){
-//		viewOrder();
-//	}
+	if (Ans == 3){
+//		viewOrder(cart);
+	}
 	if(Ans == 4){
 		cout<<"\nTerminating program...";
-//		break;
+		break;
 	}
-//};
+};
 
 return 0;	
 }
