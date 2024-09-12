@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <limits>
 using namespace std;
 
 	char choice;
@@ -190,7 +191,15 @@ void viewProduct(cartHolder& cart){
 	
 	cout<<"\nEnter Quantity: ";
 	cin>>quantity;
-	cin.ignore();
+	if(cin.fail()){
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout<<"\nError. Invalid Input."<<endl;
+		break;
+	}
+	else{
+		continue;
+	}
 	cart.Items[i].setQuantity(quantity);
 	
 	if(ans == "ABC"){
@@ -247,13 +256,18 @@ void viewProduct(cartHolder& cart){
 
 void viewCart(cartHolder& cart){
 	
+	if(cart.orderCount == 0){
+		cout<<"\nNo data Found."<<endl;
+		return;
+	}
+	
 	cout<<"Do you want to check out all the products? (Y/N): ";
 	cin>>choice;
 	cout<<"\n";
 	cin.ignore();
 	
 	if(choice == 'n' || choice == 'N'){
-		cout<<"going back to menu...";
+		cout<<"Going back to menu..."<<endl;
 	}
 	else{
 		
@@ -300,6 +314,11 @@ void viewCart(cartHolder& cart){
 void viewOrder(cartHolder& cart) {
 	
 	system("CLS");
+	
+	if(cart.orderCount == 0){
+		cout<<"\nNo data Found."<<endl;
+		return;
+	}
 	
     for (int i = 0; i < cart.orderCount; i++) {
         cout << "\nOrder ID: " << i + 1 << endl;
@@ -371,6 +390,10 @@ void Account(){
 		cout<<"\nRegistration Successful!\n"<<endl;
 	 	
 	 }
+	 
+	else{
+		cout<<"\nError. Invalid Input."<<endl;
+	} 
 
 }while(isLoggedIn != true);
 }
@@ -387,15 +410,20 @@ int main(){
 	if (Ans == 1){
 		viewProduct(cart);
 	}
- 	if (Ans == 2){
+ 	else if (Ans == 2){
 		viewCart(cart);
 	}
-	if (Ans == 3){
+	else if (Ans == 3){
 		viewOrder(cart);
 	}
-	if(Ans == 4){
+	else if(Ans == 4){
 		cout<<"\nTerminating program...";
 		break;
+	}
+	else{
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout<<"\nError. Invalid Input."<<endl;
 	}
 };
 
