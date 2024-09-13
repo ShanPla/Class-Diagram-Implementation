@@ -197,9 +197,6 @@ void viewProduct(cartHolder& cart){
 		cout<<"\nError. Invalid Input."<<endl;
 		break;
 	}
-	else{
-		continue;
-	}
 	cart.Items[i].setQuantity(quantity);
 	
 	if(ans == "ABC"){
@@ -256,7 +253,7 @@ void viewProduct(cartHolder& cart){
 
 void viewCart(cartHolder& cart){
 	
-	if(cart.orderCount == 0){
+	if(counter == 0){
 		cout<<"\nNo data Found."<<endl;
 		return;
 	}
